@@ -1,0 +1,6 @@
+{
+  "name": "Library Management System with Book Location Tracking",
+  "description": "B.Tech CSE Mini Project prototype for JSS Academy of Technical Education, Noida with book location tracking, issue/return management and fine calculation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

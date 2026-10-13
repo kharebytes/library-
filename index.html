@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management System with Book Location Tracking</title>
+    <meta name="description" content="B.Tech CSE Mini Project prototype for JSS Academy of Technical Education, Noida with book location tracking, issue/return management and fine calculation." />
+    <meta property="og:title" content="Library Management System with Book Location Tracking" />
+    <meta property="og:description" content="B.Tech CSE Mini Project prototype for JSS Academy of Technical Education, Noida with book location tracking, issue/return management and fine calculation." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <!-- Top Header: Institutional Branding -->
+    <header class="top-header">
+      <div class="header-container">
+        <div class="college-branding">
+          <div class="college-logo-badge">JSSATE</div>
+          <div class="college-info">
+            <h1>JSS Academy of Technical Education, Noida</h1>
+            <p>Department of Computer Science &amp; Engineering &bull; B.Tech 2nd Year Mini Project</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="header-btn" id="btn-about-cpp" title="View details about C++ Project implementation">
+            ℹ️ About C++ Project
+          </button>
+          <button type="button" class="header-btn danger-btn" id="btn-reset-sample-data" title="Reload original sample books & members">
+            🔄 Reset Sample Data
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Academic Context Notice Bar -->
+    <div class="academic-notice-bar">
+      <span>
+        📌 <strong>Project:</strong> Library Management System with Book Location Tracking (Section &gt; Rack &gt; Shelf)
+      </span>
+      <span>
+        <strong>Batch:</strong> CSE 2nd Year &bull; Core Engine: C++11 File System Prototype
+      </span>
+    </div>
+
+    <!-- Mobile Navigation Bar -->
+    <div class="mobile-nav-bar">
+      <span><strong>Menu &amp; Navigation</strong></span>
+      <button type="button" class="mobile-toggle-btn" id="mobile-menu-toggle">☰ Menu</button>
+    </div>
+
+    <!-- Main Layout Grid -->
+    <div class="app-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="sidebar" id="sidebar">
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a class="nav-link active" data-section="dashboard">
+              <span class="nav-icon">📊</span>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-section="add-book">
+              <span class="nav-icon">➕</span>
+              <span>Add Book</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-section="search-book">
+              <span class="nav-icon">🔍</span>
+              <span>Search Book</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-section="register-member">
+              <span class="nav-icon">👤</span>
+              <span>Register Member</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-section="view-members">
+              <span class="nav-icon">👥</span>
+              <span>View Members</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-section="issue-book">
+              <span class="nav-icon">📖</span>
+              <span>Issue Book</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-section="return-book">
+              <span class="nav-icon">📥</span>
+              <span>Return Book</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="sidebar-footer-card">
+          <h4>Location Hierarchy</h4>
+          <p>Books are tracked in real-time across:</p>
+          <p style="font-weight: 600; color: #0284c7; margin-bottom: 8px;">
+            Section &rarr; Rack &rarr; Shelf
+          </p>
+          <span class="badge-cpp">C++11 Mini Project</span>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="main-content">
+        <!-- ============================================== -->
+        <!-- 1. DASHBOARD SECTION -->
+        <!-- ============================================== -->
+        <section id="section-dashboard" class="content-section active">
+          <div class="section-header">
+            <h2>Library Overview &amp; Tracking Dashboard</h2>
+            <p>Welcome to the Central Library Management System with real-time book location tracking.</p>
+          </div>
+
+          <div class="welcome-banner">
+            <h3>Welcome to JSSATE Central Library System</h3>
+            <p>
+              This application helps students and librarians locate books accurately by Section, Rack, and Shelf, while handling book issue/return tracking and fine calculations.
+            </p>
+            <div class="tracking-pill">
+              📍 3-Tier Shelving Location Tracking Active
+            </div>
+          </div>
+
+          <div id="alert-dashboard" class="alert"></div>
+
+          <!-- 4 Summary Metric Cards -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-icon-box">📚</div>
+              <div class="metric-details">
+                <div class="metric-title">Total Books</div>
+                <div class="metric-value" id="stat-total-books">5</div>
+                <div class="metric-sub" id="stat-total-copies-sub">17 total physical copies</div>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-icon-box" style="background-color: #dcfce7; color: #15803d;">🟢</div>
+              <div class="metric-details">
+                <div class="metric-title">Available Copies</div>
+                <div class="metric-value" id="stat-available-copies">15</div>
+                <div class="metric-sub">Ready for borrowing</div>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-icon-box" style="background-color: #fef3c7; color: #b45309;">👥</div>
+              <div class="metric-details">
+                <div class="metric-title">Registered Members</div>
+                <div class="metric-value" id="stat-registered-members">4</div>
+                <div class="metric-sub">Students &amp; Faculty</div>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-icon-box" style="background-color: #fee2e2; color: #b91c1c;">📋</div>
+              <div class="metric-details">
+                <div class="metric-title">Currently Issued</div>
+                <div class="metric-value" id="stat-issued-books">2</div>
+                <div class="metric-sub">Active borrower loans</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons -->
+          <div class="quick-actions-box">
+            <h4>Quick Actions</h4>
+            <div class="quick-btn-group">
+              <button type="button" class="quick-btn quick-nav-btn" data-target="search-book">
+                🔍 Search Book Location
+              </button>
+              <button type="button" class="quick-btn quick-nav-btn" data-target="issue-book">
+                📖 Issue a Book
+              </button>
+              <button type="button" class="quick-btn quick-nav-btn" data-target="return-book">
+                📥 Return a Book
+              </button>
+              <button type="button" class="quick-btn quick-nav-btn" data-target="add-book">
+                ➕ Add New Book
+              </button>
+              <button type="button" class="quick-btn quick-nav-btn" data-target="register-member">
+                👤 Register Member
+              </button>
+            </div>
+          </div>
+
+          <!-- Location Tracking Architecture Diagram -->
+          <div class="location-guide-box">
+            <h4>How Location Tracking Works</h4>
+            <p style="font-size: 13.5px; color: var(--text-secondary);">
+              Every book copy in the library is uniquely mapped to its exact physical storage coordinate so that library staff and students can locate or shelve it immediately without searching manually:
+            </p>
+            <div class="location-flow-diagram">
+              <div class="flow-step">
+                <strong>1. Department / Section</strong>
+                <span>e.g., CSE, IT, General</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-step">
+                <strong>2. Storage Rack</strong>
+                <span>e.g., Rack 4</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-step">
+                <strong>3. Specific Shelf</strong>
+                <span>e.g., Shelf 2</span>
+              </div>
+              <div class="flow-arrow">&rarr;</div>
+              <div class="flow-step" style="background-color: #e0f2fe; border-color: #0284c7;">
+                <strong style="color: #0369a1;">Physical Book Location</strong>
+                <span>Section CSE &gt; Rack 4 &gt; Shelf 2</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dashboard Recent Issues Table -->
+          <div class="card">
+            <div class="card-title">
+              <span>📋 Current Active Issues in Circulation</span>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Book</th>
+                    <th>Borrower</th>
+                    <th>Issue Date</th>
+                    <th>Due Date (14 Days)</th>
+                    <th>Assigned Location</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboard-issues-table-body">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- 2. ADD BOOK SECTION -->
+        <!-- ============================================== -->
+        <section id="section-add-book" class="content-section">
+          <div class="section-header">
+            <h2>Add New Book to Catalog</h2>
+            <p>Register a new textbook title and assign its exact physical location in the library stacks.</p>
+          </div>
+
+          <div id="alert-add-book" class="alert"></div>
+
+          <div class="card">
+            <div class="card-title">
+              <span>📘 Book Registration &amp; Location Form</span>
+            </div>
+
+            <form id="form-add-book">
+              <div class="form-grid">
+                <!-- Book ID -->
+                <div class="form-group">
+                  <label class="form-label" for="add-book-id">
+                    Book ID <span class="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="add-book-id"
+                    class="form-control"
+                    placeholder="e.g. 106"
+                    required
+                  />
+                  <div class="form-hint">Unique identifier (duplicate IDs are rejected).</div>
+                </div>
+
+                <!-- Title -->
+                <div class="form-group">
+                  <label class="form-label" for="add-book-title">
+                    Book Title <span class="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="add-book-title"
+                    class="form-control"
+                    placeholder="e.g. Computer Organization & Architecture"
+                    required
+                  />
+                </div>
+
+                <!-- Author -->
+                <div class="form-group">
+                  <label class="form-label" for="add-book-author">
+                    Author <span class="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="add-book-author"
+                    class="form-control"
+                    placeholder="e.g. William Stallings"
+                    required
+                  />
+                </div>
+
+                <!-- Quantity -->
+                <div class="form-group">
+                  <label class="form-label" for="add-book-quantity">
+                    Number of Copies (Quantity) <span class="required">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    id="add-book-quantity"
+                    class="form-control"
+                    placeholder="e.g. 4"
+                    min="1"
+                    required
+                  />
+                </div>
+
+                <!-- Section -->
+                <div class="form-group">
+                  <label class="form-label" for="add-book-section">
+                    Library Section <span class="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="add-book-section"
+                    class="form-control"
+                    placeholder="e.g. CSE, IT, General"
+                    value="CSE"
+                    required
+                  />
+                </div>
+
+                <!-- Rack -->
+                <div class="form-group">
+                  <label class="form-label" for="add-book-rack">
+                    Rack Number <span class="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="add-book-rack"
+                    class="form-control"
+                    placeholder="e.g. Rack 4"
+                    value="Rack 1"
+                    required
+                  />
+                </div>
+
+                <!-- Shelf -->
+                <div class="form-group">
+                  <label class="form-label" for="add-book-shelf">
+                    Shelf Number <span class="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="add-book-shelf"
+                    class="form-control"
+                    placeholder="e.g. Shelf 2"
+                    value="Shelf 1"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Location Live Preview -->
+              <div class="location-preview-box">
+                <span class="location-preview-label">📍 Assigned Location Preview:</span>
+                <span class="location-preview-val" id="add-location-preview-val">Section CSE &gt; Rack 1 &gt; Shelf 1</span>
+              </div>
+
+              <div style="margin-top: 20px;">
+                <button type="submit" class="btn btn-primary">
+                  ➕ Add Book to Catalog
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- 3. SEARCH BOOK SECTION -->
+        <!-- ============================================== -->
+        <section id="section-search-book" class="content-section">
+          <div class="section-header">
+            <h2>Search Book &amp; Location Finder</h2>
+            <p>Locate any book across library racks by searching Book ID, Title, or Author name.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-title">
+              <span>🔍 Search Filters</span>
+            </div>
+
+            <div class="search-controls-box">
+              <div class="search-input-wrap">
+                <input
+                  type="text"
+                  id="search-query-input"
+                  class="form-control"
+                  placeholder="Type Book ID (e.g. 101), Title, or Author name..."
+                />
+              </div>
+
+              <div>
+                <select id="search-section-filter" class="form-control" style="min-width: 160px;">
+                  <option value="">All Sections</option>
+                  <option value="CSE">CSE Section</option>
+                  <option value="General">General Section</option>
+                  <option value="IT">IT Section</option>
+                  <option value="ECE">ECE Section</option>
+                </select>
+              </div>
+
+              <button type="button" id="search-submit-btn" class="btn btn-accent">
+                Search
+              </button>
+
+              <button type="button" id="search-clear-btn" class="btn btn-secondary">
+                Reset Filters
+              </button>
+            </div>
+
+            <div id="search-result-count" style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; font-weight: 500;">
+              Showing all books in catalog
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Book ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Copies &amp; Availability</th>
+                    <th>Exact Shelf Location (Section &gt; Rack &gt; Shelf)</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="search-results-table-body">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- 4. REGISTER MEMBER SECTION -->
+        <!-- ============================================== -->
+        <section id="section-register-member" class="content-section">
+          <div class="section-header">
+            <h2>Register Library Member</h2>
+            <p>Enroll students and faculty members into the library circulation database.</p>
+          </div>
+
+          <div id="alert-register-member" class="alert"></div>
+
+          <div class="card" style="max-width: 650px;">
+            <div class="card-title">
+              <span>👤 Member Registration Form</span>
+            </div>
+
+            <form id="form-register-member">
+              <div class="form-group">
+                <label class="form-label" for="member-id">
+                  Member ID <span class="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="member-id"
+                  class="form-control"
+                  placeholder="e.g. 205 (College Roll No. or Card ID)"
+                  required
+                />
+                <div class="form-hint">Unique identifier (duplicates are strictly prevented).</div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="member-name">
+                  Full Name <span class="required">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="member-name"
+                  class="form-control"
+                  placeholder="e.g. Abhishek Sharma"
+                  required
+                />
+              </div>
+
+              <div style="margin-top: 20px;">
+                <button type="submit" class="btn btn-primary">
+                  👤 Register Member
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- 5. VIEW MEMBERS SECTION -->
+        <!-- ============================================== -->
+        <section id="section-view-members" class="content-section">
+          <div class="section-header">
+            <h2>Registered Members Directory</h2>
+            <p>View all enrolled library members and their currently issued books.</p>
+          </div>
+
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <div class="card-title" style="margin-bottom: 0;">
+                <span>👥 Member Records Table</span>
+              </div>
+              <span id="members-count-badge" style="font-size: 13px; font-weight: 600; color: #0284c7;">
+                Total Registered Members: 4
+              </span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Member ID</th>
+                    <th>Full Name</th>
+                    <th>Currently Issued Count</th>
+                    <th>Issued Books (Titles &amp; IDs)</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="members-table-body">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- 6. ISSUE BOOK SECTION -->
+        <!-- ============================================== -->
+        <section id="section-issue-book" class="content-section">
+          <div class="section-header">
+            <h2>Issue Book to Member</h2>
+            <p>Borrow a book copy from library inventory. Due date is automatically computed for 14 days.</p>
+          </div>
+
+          <div id="alert-issue-book" class="alert"></div>
+
+          <div class="card" style="max-width: 750px;">
+            <div class="card-title">
+              <span>📖 Book Borrowing Form</span>
+            </div>
+
+            <form id="form-issue-book">
+              <div class="form-grid">
+                <!-- Member ID -->
+                <div class="form-group">
+                  <label class="form-label" for="issue-member-id">
+                    Member ID <span class="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="issue-member-id"
+                    class="form-control"
+                    placeholder="e.g. 201"
+                    required
+                  />
+                  <div class="form-hint" id="issue-member-preview"></div>
+                </div>
+
+                <!-- Book ID -->
+                <div class="form-group">
+                  <label class="form-label" for="issue-book-id">
+                    Book ID <span class="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="issue-book-id"
+                    class="form-control"
+                    placeholder="e.g. 102"
+                    required
+                  />
+                  <div class="form-hint" id="issue-book-preview"></div>
+                </div>
+
+                <!-- Issue Date -->
+                <div class="form-group full-width">
+                  <label class="form-label" for="issue-date">
+                    Issue Date <span class="required">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    id="issue-date"
+                    class="form-control"
+                    required
+                  />
+                  <div class="form-hint">Defaults to today's date. Due date will be exactly 14 days later.</div>
+                </div>
+              </div>
+
+              <div style="margin-top: 18px;">
+                <button type="submit" class="btn btn-primary">
+                  📖 Issue Book
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Reference Table: Currently Issued Books -->
+          <div class="card">
+            <div class="card-title">
+              <span>📋 Active Issued Books Reference</span>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Book ID</th>
+                    <th>Book Title</th>
+                    <th>Member ID &amp; Name</th>
+                    <th>Issue Date</th>
+                    <th>Due Date (14 Days)</th>
+                    <th>Shelving Location</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="active-issues-table-body">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- 7. RETURN BOOK SECTION -->
+        <!-- ============================================== -->
+        <section id="section-return-book" class="content-section">
+          <div class="section-header">
+            <h2>Return Book &amp; Guided Shelving</h2>
+            <p>Process returned books, compute overdue fines at Rs. 2/day, and guide exact reshelving.</p>
+          </div>
+
+          <div id="alert-return-book" class="alert"></div>
+
+          <!-- Return Form -->
+          <div class="card" style="max-width: 750px;">
+            <div class="card-title">
+              <span>📥 Book Return Form</span>
+            </div>
+
+            <form id="form-return-book">
+              <div class="form-grid">
+                <!-- Member ID -->
+                <div class="form-group">
+                  <label class="form-label" for="return-member-id">
+                    Member ID <span class="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="return-member-id"
+                    class="form-control"
+                    placeholder="e.g. 201"
+                    required
+                  />
+                  <div class="form-hint">Member who borrowed the book.</div>
+                </div>
+
+                <!-- Book ID -->
+                <div class="form-group">
+                  <label class="form-label" for="return-book-id">
+                    Book ID <span class="required">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="return-book-id"
+                    class="form-control"
+                    placeholder="e.g. 101"
+                    required
+                  />
+                  <div class="form-hint">Book ID being returned.</div>
+                </div>
+
+                <!-- Return Date -->
+                <div class="form-group full-width">
+                  <label class="form-label" for="return-date">
+                    Return Date <span class="required">*</span>
+                  </label>
+                  <input
+                    type="date"
+                    id="return-date"
+                    class="form-control"
+                    required
+                  />
+                  <div class="form-hint">Defaults to today. You can adjust the date to test/demonstrate overdue fine calculation.</div>
+                </div>
+              </div>
+
+              <div style="margin-top: 18px;">
+                <button type="submit" class="btn btn-primary">
+                  📥 Process Book Return
+                </button>
+              </div>
+            </form>
+
+            <!-- Guided Shelving Display Banner -->
+            <div class="shelving-banner" id="guided-shelving-banner">
+              <div class="shelving-banner-title">
+                <span>✅ Book Returned Successfully!</span>
+              </div>
+              <p style="font-size: 14px; color: #166534;">
+                Return processed for: <strong id="guided-book-title">Data Structures</strong>
+              </p>
+
+              <!-- Exact guided shelving message -->
+              <div class="shelving-path-display" id="guided-shelving-path">
+                Place the book at: Section CSE &gt; Rack 4 &gt; Shelf 2
+              </div>
+
+              <!-- Fine calculation details -->
+              <div class="fine-calculation-box" id="guided-fine-details">
+                <!-- Fine info dynamic -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Currently Issued Books Table to easily click and return -->
+          <div class="card">
+            <div class="card-title">
+              <span>📋 Currently Issued Books (Select any to Return)</span>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Book ID</th>
+                    <th>Book Title</th>
+                    <th>Member ID &amp; Name</th>
+                    <th>Issue Date</th>
+                    <th>Due Date (14 Days)</th>
+                    <th>Shelving Location</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="return-issues-table-body">
+                  <!-- Dynamic Rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- About / C++ Architecture Modal -->
+    <div class="modal-overlay" id="about-project-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Academic Project Details (C++11 Mini Project)</h3>
+          <button type="button" class="modal-close-btn" id="btn-close-modal">&times;</button>
+        </div>
+        
+        <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">
+          This web interface is a clean frontend demonstration/prototype for the B.Tech 2nd Year CSE Mini Project at <strong>JSS Academy of Technical Education, Noida</strong>.
+        </p>
+
+        <div class="viva-box">
+          <h4>Core Academic Project Architecture (C++11):</h4>
+          <ul style="padding-left: 20px; line-height: 1.6; color: var(--text-secondary);">
+            <li><strong>Class Book:</strong> Encapsulates Book ID, Title, Author, Total Copies, Available Copies, and 3-tier Location (Section, Rack, Shelf).</li>
+            <li><strong>Class Member:</strong> Encapsulates Member ID, Name, and issue history.</li>
+            <li><strong>Class Transaction / Circulation:</strong> Manages issue dates, 14-day due date calculation, overdue fine logic (Rs. 2/day), and guided return shelving.</li>
+            <li><strong>Data Persistence:</strong> Text-file storage / binary file handling (<code>books.dat</code>, <code>members.dat</code>).</li>
+          </ul>
+        </div>
+
+        <div class="viva-box">
+          <h4>C++ Class Definition Sample (For Viva Explanation):</h4>
+          <pre class="cpp-code-preview">class Book {
+public:
+    string bookId;
+    string title;
+    string author;
+    int quantity;
+    int available;
+    string section; // e.g. "CSE"
+    string rack;    // e.g. "Rack 4"
+    string shelf;   // e.g. "Shelf 2"
+
+    void displayLocation() const {
+        cout << "Place at: Section " << section 
+             << " > " << rack << " > " << shelf << endl;
+    }
+};</pre>
+        </div>
+
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 10px;">
+          * Note: This browser prototype is implemented using standard HTML5, CSS3, and Vanilla JavaScript with LocalStorage to provide an interactive demonstration during evaluations.
+        </p>
+      </div>
+    </div>
+
+    <!-- App Footer -->
+    <footer class="app-footer">
+      <p>
+        <strong>Library Management System with Book Location Tracking</strong> &bull;
+        B.Tech 2nd-Year CSE Mini Project &bull; JSS Academy of Technical Education, Noida
+      </p>
+      <p style="font-size: 12px; margin-top: 4px; color: #94a3b8;">
+        Demonstration Prototype &bull; Pure HTML5, CSS3, and Vanilla JavaScript
+      </p>
+    </footer>
+
+    <!-- Vanilla JavaScript -->
+    <script src="/script.js"></script>
+  </body>
+</html>
